@@ -15,6 +15,12 @@ namespace MMABooksEFClasses.MarisModels
         public decimal UnitPrice { get; set; }
         public int OnHandQuantity { get; set; }
 
+        // Same thing you did in State and Customer classes. To make more readable.
+        public override string ToString()
+        {
+            return ProductCode + ", " + Description + ", " + UnitPrice + ", " + OnHandQuantity;
+        }
+
         public virtual ICollection<Invoicelineitems> Invoicelineitems { get; set; }
     }
 }
