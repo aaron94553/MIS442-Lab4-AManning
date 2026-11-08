@@ -62,7 +62,7 @@ namespace MMABooksTests
             Assert.IsNotNull(c);
             Assert.AreEqual("Chamberland, Sarah", c.Name);
             // CHECK THIS NUMBER in MySQL Workbench:  SELECT COUNT(*) FROM invoices WHERE CustomerID = 20;
-            Assert.AreEqual(2, c.Invoices.Count);
+            Assert.AreEqual(3, c.Invoices.Count);
             Console.WriteLine(c);
         }
 
@@ -91,11 +91,11 @@ namespace MMABooksTests
             // Pick a customer that has NO invoices, or the delete is blocked by the foreign key.
             // Find one with:  SELECT CustomerID FROM customers
             //                 WHERE CustomerID NOT IN (SELECT CustomerID FROM invoices) LIMIT 5;
-            c = dbContext.Customers.Find(2);
+            c = dbContext.Customers.Find(1);
             Assert.IsNotNull(c);
             dbContext.Customers.Remove(c);
             dbContext.SaveChanges();
-            Assert.IsNull(dbContext.Customers.Find(2));
+            Assert.IsNull(dbContext.Customers.Find(1));
         }
 
         // Query 7

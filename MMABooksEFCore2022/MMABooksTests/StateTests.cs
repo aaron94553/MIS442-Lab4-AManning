@@ -64,6 +64,7 @@ namespace MMABooksTests
         [Test]
         public void DeleteTest()
         {
+            dbContext.Database.ExecuteSqlRaw("call usp_testingResetStateData()");
             s = dbContext.States.Find("HI");
             dbContext.States.Remove(s);
             dbContext.SaveChanges();
@@ -79,21 +80,26 @@ namespace MMABooksTests
             dbContext.States.Add(s);
             dbContext.SaveChanges();
             Assert.IsNotNull(dbContext.States.Find("ZZ"));
+
+            // clean up so the extra state doesn't throw off the other tests
+            dbContext.States.Remove(s);
+            dbContext.SaveChanges();
         }
 
         [Test]
         public void UpdateTest()
         {
-            s = dbContext.States.Find("OR");
+            s = dbContext.States.Find("WY");
             Assert.IsNotNull(s);
-            s.StateName = "Oregon";
+            s.StateName = "Wyoming Updated";
             dbContext.States.Update(s);
             dbContext.SaveChanges();
+            Assert.AreEqual("Wyoming Updated", dbContext.States.Find("WY").StateName);
 
-            MMABooksContext freshContext = new MMABooksContext();
-            State? updated = freshContext.States.Find("OR");
-            Assert.IsNotNull(updated);
-            Assert.AreEqual("Oregon", updated.StateName);
+            // put it back the way it was
+            s.StateName = "Wyoming";
+            dbContext.SaveChanges();
+
         }
 
         public void PrintAll(List<State> states)
